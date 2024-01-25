@@ -1,6 +1,6 @@
 import React from "react";
 import { COMPANIES_LIST_QUERY } from "@/graphql/queries";
-import { getDefaultFilter, useGo } from "@refinedev/core";
+import { getDefaultFilter, HttpError, useGo } from "@refinedev/core";
 import {
   CreateButton,
   DeleteButton,
@@ -15,10 +15,16 @@ import CustomAvatar from "@/components/custom-avatar";
 import { Text } from "@/components/text";
 import { Company } from "@/graphql/schema.types";
 import { currencyNumber } from "@/utilities";
+import { GetFieldsFromList } from "@refinedev/nestjs-query";
+import { CompaniesListQuery } from "@/graphql/types";
 
 export const CompanyList = ({ children }: React.PropsWithChildren) => {
   const go = useGo();
-  const { tableProps, filters } = useTable({
+  const { tableProps, filters } = useTable<
+    GetFieldsFromList<CompaniesListQuery>,
+    HttpError,
+    GetFieldsFromList<CompaniesListQuery>
+  >({
     resource: "companies",
     onSearch: (values) => {
       return [
